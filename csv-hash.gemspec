@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{csv-hash}
+  s.name = %q{millisami-csv-hash}
   s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Tal Atlas"]
+  s.authors = ["Tal Atlas, Millisami"]
   s.date = %q{2010-05-26}
   s.description = %q{Will import a CSV as an array of hashes. Or will export a CSV from an array of hashes (if given a column list).}
-  s.email = %q{me@talatlas.com}
+  s.email = %q{millisami@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
@@ -47,14 +47,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_runtime_dependency(%q<fastercsv>, [">= 1.5.0"])
+      # s.add_runtime_dependency(%q<fastercsv>, [">= 1.5.0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_dependency(%q<fastercsv>, [">= 1.5.0"])
+      # s.add_dependency(%q<fastercsv>, [">= 1.5.0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<fastercsv>, [">= 1.5.0"])
+    # s.add_dependency(%q<fastercsv>, [">= 1.5.0"])
   end
 end
 
