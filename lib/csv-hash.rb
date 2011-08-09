@@ -1,4 +1,10 @@
-require 'csv'
+if RUBY_VERSION < "1.9"
+  require 'faster_csv'
+  CSV = FasterCSV
+else
+  require 'csv'
+end
+
 module CSVHash
   module_function
   

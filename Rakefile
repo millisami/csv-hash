@@ -1,46 +1,44 @@
-require 'rubygems'
-require 'rake'
+require "bundler"
+Bundler.setup
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "csv-hash"
-    gem.summary = %Q{A gem for interacting with CSVs as hashes}
-    gem.description = %Q{Will import a CSV as an array of hashes. Or will export a CSV from an array of hashes (if given a column list).}
-    gem.email = "me@talatlas.com"
-    gem.homepage = "http://github.com/Talby/csv-hash"
-    gem.authors = ["Tal Atlas"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_dependency 'fastercsv', '>= 1.5.0'
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+require "rake"
+require "rdoc/task"
+require "rspec"
+require "rspec/core/rake_task"
+
+$LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
+require "csv-hash/version"
+
+task :gem => :build
+task :build do
+  system "gem build csv-hash.gemspec"
 end
 
-require 'spec/rake/spectask'
-Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
+task :install => :build do
+  system "sudo gem install mongoid-#{CSVHash::VERSION}.gem"
 end
 
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+task :release => :build do
+  system "git tag -a #{CSVHash::VERSION} -m 'Tagging #{CSVHash::VERSION}'"
+  system "git push --tags"
+  system "gem push mongoid-#{CsvHash::VERSION}.gem"
 end
 
-task :spec => :check_dependencies
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = "spec/**/*_spec.rb"
+end
+
+RSpec::Core::RakeTask.new('spec:progress') do |spec|
+  spec.rspec_opts = %w(--format progress)
+  spec.pattern = "spec/**/*_spec.rb"
+end
+
+RDoc::Task.new do |rdoc|
+  rdoc.rdoc_dir = "rdoc"
+  rdoc.title    = "csv-hash #{CSVHash::VERSION}"
+  rdoc.rdoc_files.include("README*")
+  rdoc.rdoc_files.include("CHANGELOG*")
+  rdoc.rdoc_files.include("lib/**/*.rb")
+end
 
 task :default => :spec
-
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "csv-hash #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
